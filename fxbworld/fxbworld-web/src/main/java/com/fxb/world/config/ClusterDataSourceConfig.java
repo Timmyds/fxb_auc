@@ -1,4 +1,4 @@
-package com.fxb.world.config;
+/*package com.fxb.world.config;
 
 import javax.sql.DataSource;
 
@@ -21,7 +21,7 @@ public class ClusterDataSourceConfig {
 	static final String PACKAGE = "com.fxb.world.dao.cluster";
 	static final String MAPPER_LOCATION = "classpath:mapper/*.xml";
 
-/*	@Value("${cluster.datasource.url}")
+	@Value("${cluster.datasource.url}")
 	private String url;
 
 	@Value("${cluster.datasource.username}")
@@ -41,7 +41,11 @@ public class ClusterDataSourceConfig {
 		dataSource.setUsername(user);
 		dataSource.setPassword(password);
 		return dataSource;
-	}*/
+	}
+	
+	
+	
+	
 	@Autowired
 	@Qualifier("clusterDataSource")
 	private DataSource clusterDataSource;
@@ -61,3 +65,4 @@ public class ClusterDataSourceConfig {
 		return sessionFactory.getObject();
 	}
 }
+*/

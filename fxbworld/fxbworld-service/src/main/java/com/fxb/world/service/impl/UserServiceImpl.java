@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,11 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fxb.world.dao.TUserMapper;
 import com.fxb.world.entity.TUser;
 import com.fxb.world.service.BaseService;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
 import tk.mybatis.mapper.entity.Example;
-import tk.mybatis.mapper.util.StringUtil;
 
 /**
  * Created by yangqj on 2017/4/21.
@@ -29,20 +28,29 @@ public class UserServiceImpl  extends BaseService<TUser>{
     
     public PageInfo<TUser> selectByPage(TUser user, int start, int length) {
         int page = start/length+1;
-        Example example = new Example(User.class);
+        Example example = new Example(TUser.class);
         Example.Criteria criteria = example.createCriteria();
-        if (StringUtil.isNotEmpty(user.getUserName())) {
+       /* if (StringUtil.isNotEmpty(user.getUserName())) {
             criteria.andLike("username", "%" + user.getUserName() + "%");
         }
         if (user.getId() != null) {
             criteria.andEqualTo("id", user.getId());
-        }
+        }*/
     
         //分页查询
         PageHelper.startPage(page, length);
         List<TUser> userList = selectByExample(example);
         return new PageInfo<>(userList);
     }
+    public PageInfo<TUser> queryPage(String userName,int pageNum,int pageSize){  
+       /* Page<TUser> page = PageHelper.startPage(pageNum, pageSize);  
+        //PageHelper会自动拦截到下面这查询sql  
+        this.tUserMapper.selectAll(); 
+        return page.toPageInfo();*/ 
+        PageHelper.startPage(pageNum, pageSize);  
+        List<TUser> list=this.tUserMapper.selectAll();   
+        return new PageInfo<>(list);  
+    }  
 
     
     public TUser selectByUsername(Long id) {

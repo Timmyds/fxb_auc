@@ -30,12 +30,14 @@ public class UserController {
     private UserServiceImpl userServiceImpl;
     @Resource
     private RedisTemplate<String,String> redisTemplate;
-    @RequestMapping
+    
+    @RequestMapping(value = "/findUser")
+    @ResponseBody
     public Map<String,Object> getAll(TUser user, String draw,
                                      @RequestParam(required = false, defaultValue = "1") int start,
                                      @RequestParam(required = false, defaultValue = "10") int length){
         Map<String,Object> map = new HashMap<>();
-        PageInfo<TUser> pageInfo = userServiceImpl.selectByPage(user, start, length);
+        PageInfo<TUser> pageInfo = userServiceImpl.selectByPage(user, 1, 10);
         System.out.println("pageInfo.getTotal():"+pageInfo.getTotal());
         map.put("draw",draw);
         map.put("recordsTotal",pageInfo.getTotal());
@@ -44,17 +46,27 @@ public class UserController {
         return map;
     }
 
-
+    @RequestMapping(value = "/findUsers")
+    @ResponseBody
+    public PageInfo<TUser> findUsers(TUser user,
+                                     @RequestParam(required = false, defaultValue = "1") int start,
+                                     @RequestParam(required = false, defaultValue = "10") int length){
+        Map<String,Object> map = new HashMap<>();
+        PageInfo<TUser> pageInfo = userServiceImpl.queryPage("", 1, 10);
+        System.out.println("pageInfo.getTotal():"+pageInfo.getTotal());
+       
+        return pageInfo;
+    }
     @RequestMapping(value = "/getUser")
     @ResponseBody
     public TUser getUser(Long id){
       try{
           TUser selectByUsername = userServiceImpl.selectByUsername(id);
-          ValueOperations<String, String> vo = redisTemplate.opsForValue();  
+         /* ValueOperations<String, String> vo = redisTemplate.opsForValue();  
           vo.set("test_key", "4561632456-----------------");  
     
  
-          System.out.println(redisTemplate.opsForValue().get("test_key"));
+          System.out.println(redisTemplate.opsForValue().get("test_key"));*/
           return selectByUsername;
       }catch (Exception e){
           e.printStackTrace();
